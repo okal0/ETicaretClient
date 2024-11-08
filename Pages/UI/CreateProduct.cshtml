@@ -1,0 +1,27 @@
+﻿@page
+@model CreateProductModel
+
+
+<h2>Create Product</h2>
+
+<form method="post">
+    <div>
+        <label>Name:</label>
+        <input type="text" asp-for="product.Name" />
+    </div>
+    <div>
+        <label>Price:</label>
+        <input type="number" asp-for="product.Price" step="0.01" />
+    </div>
+    <div>
+        <label>Stock:</label>
+        <textarea asp-for="product.Stock"></textarea>
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}
