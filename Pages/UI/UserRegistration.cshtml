@@ -1,0 +1,34 @@
+﻿@page
+@model ETicaretClient.Pages.UI.UserRegistrationModel
+
+<form method="post">
+    <div>
+        <label>Name Surname:</label>
+        <input type="text" asp-for="NewUser.NameSurname" />
+    </div>
+    <div>
+        <label>UserName:</label>
+        <input type="text" asp-for="NewUser.UserName" />
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" asp-for="NewUser.Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" asp-for="NewUser.Password" />
+    </div>
+    <div>
+        <label>Password Confirmation:</label>
+        <input type="password" asp-for="NewUser.PasswordConfirm" />
+    </div>
+    <button type="submit">Kayıt Ol</button>
+</form>
+
+
+
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}  

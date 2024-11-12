@@ -3,19 +3,30 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace ETicaretClient.Services.common
+namespace ETicaretClient.Services.Base
 {
+    
+    public partial interface IClient {
+    
+        public Task<T> GetAsync<T>(RequestParameters requestParameters, string id = null);
+
+        public Task<T> PostAsync<T>(RequestParameters requestParameters, T body);
+
+        public Task<T> PutAsync<T>(RequestParameters requestParameters, T body);
+
+        public Task<T> DeleteAsync<T>(RequestParameters requestParameters, string id);
+    }
 
 
-    public class HttpClientService
+    public partial class Client : IClient
     {
-        private readonly HttpClient _httpClient;
+        protected readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
-        public HttpClientService(HttpClient httpClient, string baseUrl)
+        public Client(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _baseUrl = baseUrl;
+            _baseUrl = httpClient.BaseAddress.ToString();
         }
 
         private string BuildUrl(RequestParameters requestParameters)
@@ -56,8 +67,13 @@ namespace ETicaretClient.Services.common
             if (requestParameters.Headers != null)
                 _httpClient.DefaultRequestHeaders.Clear();
 
+            if(requestParameters.Headers != null)
+            {
             foreach (var header in requestParameters.Headers)
                 _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+           
+            Console.WriteLine($"Request URL: {url}"); // Log the URL
 
             var response = await _httpClient.PostAsJsonAsync(url, body);
             response.EnsureSuccessStatusCode();

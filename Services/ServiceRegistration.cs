@@ -1,4 +1,5 @@
-﻿using ETicaretClient.Services.common;
+﻿using ETicaretClient.Contracts;
+using ETicaretClient.Services.Base;
 
 namespace ETicaretClient.Services
 {
@@ -6,10 +7,16 @@ namespace ETicaretClient.Services
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddHttpClient<HttpClientService>(client =>
+
+            services.AddHttpClient<IClient, Client>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7089");
+                client.BaseAddress = new Uri("https://localhost:7089/api");
             });
+
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
+
         }
     }
 }

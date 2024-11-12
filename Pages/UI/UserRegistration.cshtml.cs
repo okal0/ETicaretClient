@@ -1,24 +1,26 @@
 using ETicaretClient.Contracts;
 using ETicaretClient.Models.Product;
-using ETicaretClient.Services.Base;
-using ETicaretClient.Services.models;
+using ETicaretClient.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ETicaretClient.Pages.UI
 {
-    public class CreateProductModel : PageModel
+    public class UserRegistrationModel : PageModel
     {
-        private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public CreateProductModel(IProductService productService)
+        public UserRegistrationModel(IUserService userService)
         {
-            _productService = productService;
+            _userService = userService;
         }
 
         [BindProperty]
-        public Product product { get; set; }
+        public UserInfo NewUser { get; set; }
         public string Message { get; set; }
+
+
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -29,9 +31,8 @@ namespace ETicaretClient.Pages.UI
             try
             {
                 // Use the custom HttpClientService to send the POST request
-                var createdProduct = await _productService.CreateProduct(product);
+                var createdProduct = await _userService.CreateUser(NewUser);
                 Message = "Product created successfully!";
-               
             }
             catch (Exception ex)
             {
@@ -43,6 +44,7 @@ namespace ETicaretClient.Pages.UI
 
         public void OnGet()
         {
+
         }
     }
 }
