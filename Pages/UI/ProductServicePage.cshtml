@@ -1,0 +1,81 @@
+﻿@page
+@model ProductServicePageModel
+@{
+    ViewData["Title"] = "Product Service";
+}
+
+<h1>Product Service</h1>
+
+<h2>Create Product</h2>
+<form method="post" asp-page-handler="CreateProduct">
+    <label for="Product_Name">Name:</label>
+    <input type="text" id="Product_Name" asp-for="Product.Name" required><br>
+    <label for="Product_Stock">Stock:</label>
+    <input type="number" id="Product_Stock" asp-for="Product.Stock" required><br>
+    <label for="Product_Price">Price:</label>
+    <input type="number" step="0.01" id="Product_Price" asp-for="Product.Price" required><br>
+    <button type="submit">Create Product</button>
+</form>
+
+<h2>Delete Product</h2>
+<form method="post" asp-page-handler="DeleteProduct">
+    <label for="ProductId">ID:</label>
+    <input type="text" id="ProductId" asp-for="ProductId" required><br>
+    <button type="submit">Delete Product</button>
+</form>
+
+<h2>Get Product</h2>
+<form method="post" asp-page-handler="GetProduct">
+    <label for="ProductId">ID:</label>
+    <input type="text" id="ProductId" asp-for="ProductId" required><br>
+    <button type="submit">Get Product</button>
+</form>
+
+@if (Model.Product != null)
+{
+    <div>
+        <h3>Product Details</h3>
+        <p>ID: @Model.Product.Id</p>
+        <p>Name: @Model.Product.Name</p>
+        <p>Stock: @Model.Product.Stock</p>
+        <p>Price: @Model.Product.Price</p>
+    </div>
+}
+
+<h2>Get Products</h2>
+<form method="post" asp-page-handler="GetProducts">
+    <label for="Page">Page:</label>
+    <input type="number" id="Page" asp-for="Page" required><br>
+    <label for="Size">Size:</label>
+    <input type="number" id="Size" asp-for="Size" required><br>
+    <button type="submit">Get All Products</button>
+</form>
+
+@if (Model.Products != null && Model.Products.Count > 0)
+{
+    <div>
+        <h3>Product List</h3>
+        <ul>
+            @foreach (var product in Model.Products)
+            {
+                <li>@product.Id - @product.Name - @product.Stock - @product.Price</li>
+            }
+        </ul>
+    </div>
+}
+
+<h2>Update Product</h2>
+<form method="post" asp-page-handler="UpdateProduct">
+    <label for="Product_Id">ID:</label>
+    <input type="text" id="Product_Id" asp-for="Product.Id" required><br>
+    <label for="Product_Name">Name:</label>
+    <input type="text" id="Product_Name" asp-for="Product.Name" required><br>
+    <label for="Product_Stock">Stock:</label>
+    <input type="number" id="Product_Stock" asp-for="Product.Stock" required><br>
+    <label for="Product_Price">Price:</label>
+    <input type="number" step="0.01" id="Product_Price" asp-for="Product.Price" required><br>
+    <button type="submit">Update Product</button>
+</form>
+
+<h2>Return Message</h2>
+<p>@Model.ReturnMessage</p>

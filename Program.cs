@@ -1,7 +1,7 @@
 using ETicaretClient.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ETicaretAPI.Persistence.Contexts;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

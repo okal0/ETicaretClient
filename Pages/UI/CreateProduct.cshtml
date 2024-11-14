@@ -1,27 +1,40 @@
 ﻿@page
 @model CreateProductModel
+@using Microsoft.AspNetCore.Mvc.RazorPages
 
+<div class="container">
+    <h2>Ürün Oluştur</h2>
+    
+    <form method="post" class="form" id="createProductForm">
+        <!-- Product Name -->
+        <div class="form-group">
+            <label for="name">Ürün İsmi:</label>
+            <input type="text" id="name" asp-for="product.Name" class="form-control" />
+        </div>
+        
+        <!-- Product Price -->
+        <div class="form-group">
+            <label for="price">Fiyat:</label>
+            <input type="number" id="price" asp-for="product.Price" step="0.01" class="form-control" />
+        </div>
+        
+        <!-- Product Stock -->
+        <div class="form-group">
+            <label for="stock">Stok:</label>
+            <textarea id="stock" asp-for="product.Stock" class="form-control"></textarea>
+        </div>
 
-<h2>Create Product</h2>
-
-<form method="post">
-    <div>
-        <label>Name:</label>
-        <input type="text" asp-for="product.Name" />
-    </div>
-    <div>
-        <label>Price:</label>
-        <input type="number" asp-for="product.Price" step="0.01" />
-    </div>
-    <div>
-        <label>Stock:</label>
-        <textarea asp-for="product.Stock"></textarea>
-    </div>
-    <button type="submit">Create</button>
-</form>
-
+        <button type="submit" class="btn btn-primary mt-3">Ürünü Oluştur</button>
+    </form>
+</div>
 
 @if (Model.Message != null)
 {
-    <p>@Model.Message</p>
+    <div class="alert alert-info mt-3">@Model.Message</div>
 }
+
+<style>
+    .form-group {
+        margin-bottom: 1rem;
+    }
+</style>

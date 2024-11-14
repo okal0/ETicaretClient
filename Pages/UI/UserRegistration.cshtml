@@ -1,34 +1,60 @@
 ﻿@page
 @model ETicaretClient.Pages.UI.UserRegistrationModel
 
-<form method="post">
-    <div>
-        <label>Name Surname:</label>
-        <input type="text" asp-for="NewUser.NameSurname" />
-    </div>
-    <div>
-        <label>UserName:</label>
-        <input type="text" asp-for="NewUser.UserName" />
-    </div>
-    <div>
-        <label>Email:</label>
-        <input type="email" asp-for="NewUser.Email" />
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" asp-for="NewUser.Password" />
-    </div>
-    <div>
-        <label>Password Confirmation:</label>
-        <input type="password" asp-for="NewUser.PasswordConfirm" />
-    </div>
-    <button type="submit">Kayıt Ol</button>
-</form>
+@{
+    ViewData["Title"] = "Register";
+}
 
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="register" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="NewUser.NameSurname" class="form-control" aria-required="true" />
+                    <label asp-for="NewUser.NameSurname" class="form-label"></label>
+                    <span asp-validation-for="NewUser.NameSurname" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewUser.UserName" class="form-control" aria-required="true" />
+                    <label asp-for="NewUser.UserName" class="form-label"></label>
+                    <span asp-validation-for="NewUser.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewUser.Email" class="form-control" aria-required="true" />
+                    <label asp-for="NewUser.Email" class="form-label"></label>
+                    <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewUser.Password" class="form-control" type="password" aria-required="true" />
+                    <label asp-for="NewUser.Password" class="form-label"></label>
+                    <span asp-validation-for="NewUser.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewUser.PasswordConfirm" class="form-control" type="password" aria-required="true" />
+                    <label asp-for="NewUser.PasswordConfirm" class="form-label"></label>
+                    <span asp-validation-for="NewUser.PasswordConfirm" class="text-danger"></span>
+                </div>
 
-
+                <div>
+                    <button id="register-submit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
 
 @if (Model.Message != null)
 {
-    <p>@Model.Message</p>
-}  
+    <div class="alert alert-info">
+        <p>@Model.Message</p>
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

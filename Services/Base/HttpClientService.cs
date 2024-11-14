@@ -1,20 +1,21 @@
 ﻿using ETicaretClient.Services.models;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace ETicaretClient.Services.Base
 {
-    
-    public partial interface IClient {
-    
-        public Task<T> GetAsync<T>(RequestParameters requestParameters, string id = null);
 
-        public Task<T> PostAsync<T>(RequestParameters requestParameters, T body);
+    public partial interface IClient
+    {
+        public Task<TResponse> GetAsync<TResponse>(RequestParameters requestParameters, string id = null);
 
-        public Task<T> PutAsync<T>(RequestParameters requestParameters, T body);
+        public Task<TResponse> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
 
-        public Task<T> DeleteAsync<T>(RequestParameters requestParameters, string id);
+        public Task<TResponse> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
+
+        public Task<TResponse> DeleteAsync<TResponse>(RequestParameters requestParameters, string id);
     }
 
 
@@ -46,21 +47,24 @@ namespace ETicaretClient.Services.Base
             return url;
         }
 
-        public async Task<T> GetAsync<T>(RequestParameters requestParameters, string id = null)
+        public async Task<TResponse> GetAsync<TResponse>(RequestParameters requestParameters, string id = null)
         {
             string url = BuildUrl(requestParameters) + (id != null ? $"/{id}" : "");
 
-            // Optional: Configure headers if provided
             if (requestParameters.Headers != null)
+            {
                 _httpClient.DefaultRequestHeaders.Clear();
+                foreach (var header in requestParameters.Headers)
+                {
+                    _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+                }
+            }
 
-            foreach (var header in requestParameters.Headers)
-                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-
-            return await _httpClient.GetFromJsonAsync<T>(url);
+            return await _httpClient.GetFromJsonAsync<TResponse>(url);
         }
 
-        public async Task<T> PostAsync<T>(RequestParameters requestParameters, T body)
+
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
         {
             string url = BuildUrl(requestParameters);
 
@@ -78,10 +82,10 @@ namespace ETicaretClient.Services.Base
             var response = await _httpClient.PostAsJsonAsync(url, body);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<T>();
+            return await response.Content.ReadFromJsonAsync<TResponse>();
         }
 
-        public async Task<T> PutAsync<T>(RequestParameters requestParameters, T body)
+        public async Task<TResponse> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
         {
             string url = BuildUrl(requestParameters);
 
@@ -94,10 +98,10 @@ namespace ETicaretClient.Services.Base
             var response = await _httpClient.PutAsJsonAsync(url, body);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<T>();
+            return await response.Content.ReadFromJsonAsync<TResponse>();
         }
 
-        public async Task<T> DeleteAsync<T>(RequestParameters requestParameters, string id)
+        public async Task<TResponse> DeleteAsync<TResponse>(RequestParameters requestParameters, string id)
         {
             string url = BuildUrl(requestParameters) + $"/{id}";
 
@@ -110,7 +114,7 @@ namespace ETicaretClient.Services.Base
             var response = await _httpClient.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<T>();
+            return await response.Content.ReadFromJsonAsync<TResponse>();
         }
     }
 

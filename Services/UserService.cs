@@ -1,6 +1,9 @@
 ﻿using ETicaretClient.Contracts;
 using ETicaretClient.Contracts.User;
+using ETicaretClient.DTOs;
 using ETicaretClient.Services.Base;
+using System;
+using System.Threading.Tasks;
 
 namespace ETicaretClient.Services
 {
@@ -8,24 +11,40 @@ namespace ETicaretClient.Services
     {
         public UserService(IClient httpClient) : base(httpClient)
         {
-
         }
 
-        public Task<UserInfo> CreateUser(UserInfo user)
+        public Task<UserLoginResponse> CreateUser(UserInfo user)
         {
-            requestParams.Controller = "User";
-            return _client.PostAsync(requestParams, user);
+            requestParams.Controller = "Users";
+            var response = _client.PostAsync<UserInfo, UserLoginResponse>(requestParams, user);
+
+            if (response != null && response.Result.IsSuccess)
+            {
+                return response;
+            }
+            else
+            {
+                // Handle error response
+                throw new Exception($"API call failed with message: {response.Result.Message}");
+            }
         }
 
-        public Task<UserLogin> UserLogin(UserLogin user)
+        public async Task<UserLoginResponse> UserLogin(UserLogin user)
         {
-            requestParams.Controller = "User";
+            requestParams.Controller = "Users";
             requestParams.Action = "Login";
-            return _client.PostAsync(requestParams, user);
+            var response = await _client.PostAsync<UserLogin, UserLoginResponse>(requestParams, user);
+
+            if (response != null && response.IsSuccess)
+            {
+                return response;
+            }
+            else
+            {
+                // Handle error response
+                throw new Exception($"API call failed with message: {response.Message}");
+            }
         }
-
-        
-
 
     }
 }

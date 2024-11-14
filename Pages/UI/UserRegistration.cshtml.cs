@@ -27,11 +27,13 @@ namespace ETicaretClient.Pages.UI
                 return Page();
             }
 
+            
+            Console.WriteLine($"New User Information: {NewUser}");
             try
             {
                 // Use the custom HttpClientService to send the POST request
-                var createdProduct = await _userService.CreateUser(NewUser);
-                Message = "Product created successfully!";
+                var createdUser = await _userService.CreateUser(NewUser);
+                Message = "User created successfully!";
             }
             catch (Exception ex)
             {

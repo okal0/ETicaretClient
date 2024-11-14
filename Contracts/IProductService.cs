@@ -3,7 +3,7 @@ namespace ETicaretClient.Contracts
 {
     public interface IProductService
     {
-        public Task<List<Product>> GetProducts();
+        public Task<ProductResponse> GetProducts(int page, int size);
 
         public Task<Product> GetProduct(string id);
 
