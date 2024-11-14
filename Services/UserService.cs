@@ -17,13 +17,14 @@ namespace ETicaretClient.Services
             return _client.PostAsync(requestParams, user);
         }
 
-        public Task<UserLogin> CreateUserLogin(UserLogin user)
+        public Task<UserLogin> UserLogin(UserLogin user)
         {
             requestParams.Controller = "User";
             requestParams.Action = "Login";
             return _client.PostAsync(requestParams, user);
         }
 
+        
 
 
     }

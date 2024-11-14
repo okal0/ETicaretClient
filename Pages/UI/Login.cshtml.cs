@@ -5,16 +5,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ETicaretClient.Pages.UI
 {
-    public class UserLoginModel : PageModel
+    public class LoginModel : PageModel
     {
         private readonly IUserService _userService;
-        UserLogin NewUser = new UserLogin();
-        string Message { get; set; }
-        UserLoginModel(IUserService userService)
-        {
-            _userService = userService;
-        }
-
+        public UserLogin Input = new UserLogin();
+        string? Message { get; set; }
+        public LoginModel(IUserService userService) => _userService = userService;
+        public string ReturnUrl { get; set; }
 
 
         public async Task<IActionResult> OnPostAsync()
@@ -26,9 +23,9 @@ namespace ETicaretClient.Pages.UI
 
             try
             {
-                // Use the service for log-in
-                
-                Message = "Baþarýyla giriþ yaptýnýz!";
+                // Use the custom HttpClientService to send the POST request
+                var user = await _userService.UserLogin(Input);
+                Message = "You are in successfully!";
             }
             catch (Exception ex)
             {
