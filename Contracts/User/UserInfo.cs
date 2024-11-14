@@ -1,4 +1,4 @@
-﻿namespace ETicaretClient.Models.User
+﻿namespace ETicaretClient.Contracts.User
 {
     public class UserInfo
     {

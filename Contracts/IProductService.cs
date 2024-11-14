@@ -1,6 +1,4 @@
-﻿using ETicaretClient.Models.Product;
-using ETicaretClient.Services.models;
-
+﻿
 namespace ETicaretClient.Contracts
 {
     public interface IProductService

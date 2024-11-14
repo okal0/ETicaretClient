@@ -1,4 +1,4 @@
-﻿namespace ETicaretClient.Models.Product
+﻿namespace ETicaretClient.Contracts
 {
     public class Product
     {

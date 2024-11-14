@@ -5,18 +5,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ETicaretClient.Pages.UI
 {
-    public class UserRegistrationModel : PageModel
+    public class UserLoginModel : PageModel
     {
         private readonly IUserService _userService;
-
-        public UserRegistrationModel(IUserService userService)
+        UserLogin NewUser = new UserLogin();
+        string Message { get; set; }
+        UserLoginModel(IUserService userService)
         {
             _userService = userService;
         }
-
-        [BindProperty]
-        public UserInfo NewUser { get; set; }
-        public string Message { get; set; }
 
 
 
@@ -29,9 +26,9 @@ namespace ETicaretClient.Pages.UI
 
             try
             {
-                // Use the custom HttpClientService to send the POST request
-                var createdProduct = await _userService.CreateUser(NewUser);
-                Message = "Product created successfully!";
+                // Use the service for log-in
+                
+                Message = "Baþarýyla giriþ yaptýnýz!";
             }
             catch (Exception ex)
             {
@@ -40,10 +37,8 @@ namespace ETicaretClient.Pages.UI
 
             return Page();
         }
-
         public void OnGet()
         {
-
         }
     }
 }

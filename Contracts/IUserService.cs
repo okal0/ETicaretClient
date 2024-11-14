@@ -1,5 +1,5 @@
-﻿using ETicaretClient.Models.Product;
-using ETicaretClient.Models.User;
+﻿using ETicaretClient.Contracts.User;
+
 
 namespace ETicaretClient.Contracts
 {

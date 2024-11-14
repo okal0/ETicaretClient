@@ -1,6 +1,5 @@
 ﻿using ETicaretClient.Contracts;
-using ETicaretClient.Models.Product;
-using ETicaretClient.Models.User;
+using ETicaretClient.Contracts.User;
 using ETicaretClient.Services.Base;
 
 namespace ETicaretClient.Services
@@ -17,6 +16,14 @@ namespace ETicaretClient.Services
             requestParams.Controller = "User";
             return _client.PostAsync(requestParams, user);
         }
+
+        public Task<UserLogin> CreateUserLogin(UserLogin user)
+        {
+            requestParams.Controller = "User";
+            requestParams.Action = "Login";
+            return _client.PostAsync(requestParams, user);
+        }
+
 
 
     }

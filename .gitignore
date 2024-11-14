@@ -362,9 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-ETicaretClient.csproj
-ETicaretClient.csproj.user
-ETicaretClient.sln
+
 
 wwwroot/
-/ETicaretClient.csproj
+

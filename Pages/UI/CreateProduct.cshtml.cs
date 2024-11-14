@@ -1,5 +1,4 @@
 using ETicaretClient.Contracts;
-using ETicaretClient.Models.Product;
 using ETicaretClient.Services.Base;
 using ETicaretClient.Services.models;
 using Microsoft.AspNetCore.Mvc;
