@@ -1,1 +1,1 @@
-Razor Pages frontend for ETicaretAPI Progress - in progress -
+Razor Pages frontend for ETicaretAPI - in progress -
