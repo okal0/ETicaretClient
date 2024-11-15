@@ -1,23 +1,18 @@
-﻿using ETicaretClient.Services.models;
+﻿using ETicaretClient.Models;
+using ETicaretClient.Services.models;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace ETicaretClient.Services.Base
 {
-
     public partial interface IClient
     {
-        public Task<TResponse> GetAsync<TResponse>(RequestParameters requestParameters, string id = null);
-
-        public Task<TResponse> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
-
-        public Task<TResponse> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
-
-        public Task<TResponse> DeleteAsync<TResponse>(RequestParameters requestParameters, string id);
+        public Task<ApiResponse<TResponse>> GetAsync<TResponse>(RequestParameters requestParameters, string id = null);
+        public Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
+        public Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body);
+        public Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(RequestParameters requestParameters, string id);
     }
-
 
     public partial class Client : IClient
     {
@@ -47,7 +42,7 @@ namespace ETicaretClient.Services.Base
             return url;
         }
 
-        public async Task<TResponse> GetAsync<TResponse>(RequestParameters requestParameters, string id = null)
+        public async Task<ApiResponse<TResponse>> GetAsync<TResponse>(RequestParameters requestParameters, string id = null)
         {
             string url = BuildUrl(requestParameters) + (id != null ? $"/{id}" : "");
 
@@ -60,32 +55,30 @@ namespace ETicaretClient.Services.Base
                 }
             }
 
-            return await _httpClient.GetFromJsonAsync<TResponse>(url);
+            var response = await _httpClient.GetAsync(url);
+            return await CreateApiResponse<TResponse>(response);
         }
 
-
-        public async Task<TResponse> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
+        public async Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
         {
             string url = BuildUrl(requestParameters);
 
             if (requestParameters.Headers != null)
                 _httpClient.DefaultRequestHeaders.Clear();
 
-            if(requestParameters.Headers != null)
+            if (requestParameters.Headers != null)
             {
-            foreach (var header in requestParameters.Headers)
-                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+                foreach (var header in requestParameters.Headers)
+                    _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
-           
+
             Console.WriteLine($"Request URL: {url}"); // Log the URL
 
             var response = await _httpClient.PostAsJsonAsync(url, body);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadFromJsonAsync<TResponse>();
+            return await CreateApiResponse<TResponse>(response);
         }
 
-        public async Task<TResponse> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
+        public async Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(RequestParameters requestParameters, TRequest body)
         {
             string url = BuildUrl(requestParameters);
 
@@ -96,12 +89,10 @@ namespace ETicaretClient.Services.Base
                 _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 
             var response = await _httpClient.PutAsJsonAsync(url, body);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadFromJsonAsync<TResponse>();
+            return await CreateApiResponse<TResponse>(response);
         }
 
-        public async Task<TResponse> DeleteAsync<TResponse>(RequestParameters requestParameters, string id)
+        public async Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(RequestParameters requestParameters, string id)
         {
             string url = BuildUrl(requestParameters) + $"/{id}";
 
@@ -112,10 +103,26 @@ namespace ETicaretClient.Services.Base
                 _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 
             var response = await _httpClient.DeleteAsync(url);
-            response.EnsureSuccessStatusCode();
+            return await CreateApiResponse<TResponse>(response);
+        }
 
-            return await response.Content.ReadFromJsonAsync<TResponse>();
+        private async Task<ApiResponse<TResponse>> CreateApiResponse<TResponse>(HttpResponseMessage response)
+        {
+            var apiResponse = new ApiResponse<TResponse>
+            {
+                IsSuccess = response.IsSuccessStatusCode
+            };
+
+            if (response.IsSuccessStatusCode)
+            {
+                apiResponse.Data = await response.Content.ReadFromJsonAsync<TResponse>();
+            }
+            else
+            {
+                apiResponse.ErrorMessage = await response.Content.ReadAsStringAsync();
+            }
+
+            return apiResponse;
         }
     }
-
 }

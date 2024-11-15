@@ -1,6 +1,7 @@
 ﻿using ETicaretClient.Contracts;
 using ETicaretClient.Services.Base;
 using ETicaretClient.Services.models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,44 +13,89 @@ namespace ETicaretClient.Services
         {
         }
 
-        public Task<Product> CreateProduct(Product product)
+        public async Task<Product> CreateProduct(Product product)
         {
             requestParams.Controller = "Products";
             requestParams.Action = null;
             requestParams.QueryString = null;
-            return _client.PostAsync<Product, Product>(requestParams, product);
+            var response = await _client.PostAsync<Product, Product>(requestParams, product);
+
+            if (response.IsSuccess)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new Exception($"API call failed with message: {response.ErrorMessage}");
+            }
         }
 
-        public Task<Product> DeleteProduct(string id)
+        public async Task<Product> DeleteProduct(string id)
         {
             requestParams.Controller = "Products";
             requestParams.Action = null;
             requestParams.QueryString = null;
-            return _client.DeleteAsync<Product>(requestParams, id);
+            var response = await _client.DeleteAsync<Product>(requestParams, id);
+
+            if (response.IsSuccess)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new Exception($"API call failed with message: {response.ErrorMessage}");
+            }
         }
 
-        public Task<Product> GetProduct(string id)
+        public async Task<Product> GetProduct(string id)
         {
             requestParams.Controller = "Products";
             requestParams.Action = null;
             requestParams.QueryString = null;
-            return _client.GetAsync<Product>(requestParams, id);
+            var response = await _client.GetAsync<Product>(requestParams, id);
+
+            if (response.IsSuccess)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new Exception($"API call failed with message: {response.ErrorMessage}");
+            }
         }
 
-        public Task<ProductResponse> GetProducts(int page, int size)
+        public async Task<ProductResponse> GetProducts(int page, int size)
         {
             requestParams.Controller = "Products";
             requestParams.Action = null;
             requestParams.QueryString = $"Page={page}&Size={size}";
-            return _client.GetAsync<ProductResponse>(requestParams);
+            var response = await _client.GetAsync<ProductResponse>(requestParams);
+
+            if (response.IsSuccess)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new Exception($"API call failed with message: {response.ErrorMessage}");
+            }
         }
 
-        public Task<Product> UpdateProduct(Product product)
+        public async Task<Product> UpdateProduct(Product product)
         {
             requestParams.Controller = "Products";
             requestParams.Action = null;
             requestParams.QueryString = null;
-            return _client.PutAsync<Product, Product>(requestParams, product);
+            var response = await _client.PutAsync<Product, Product>(requestParams, product);
+
+            if (response.IsSuccess)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new Exception($"API call failed with message: {response.ErrorMessage}");
+            }
         }
     }
 }
