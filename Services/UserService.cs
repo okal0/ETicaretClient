@@ -13,19 +13,19 @@ namespace ETicaretClient.Services
         {
         }
 
-        public Task<UserLoginResponse> CreateUser(UserInfo user)
+        public async Task<UserLoginResponse> CreateUser(UserInfo user)
         {
             requestParams.Controller = "Users";
-            var response = _client.PostAsync<UserInfo, UserLoginResponse>(requestParams, user);
+            var response = await _client.PostAsync<UserInfo, UserLoginResponse>(requestParams, user);
 
-            if (response != null && response.Result.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 return response;
             }
             else
             {
                 // Handle error response
-                throw new Exception($"API call failed with message: {response.Result.Message}");
+                throw new Exception($"API call failed with message: {response?.Message ?? "Unknown error"}");
             }
         }
 
@@ -41,10 +41,10 @@ namespace ETicaretClient.Services
             }
             else
             {
-                // Handle error response
-                throw new Exception($"API call failed with message: {response.Message}");
+                // Log the response for debugging
+                var responseContent = response != null ? response.Message : "No response";
+                throw new Exception($"API call failed with message: {responseContent}");
             }
         }
-
     }
 }

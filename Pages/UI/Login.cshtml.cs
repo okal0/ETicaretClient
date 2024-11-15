@@ -9,7 +9,7 @@ namespace ETicaretClient.Pages.UI
     {
         private readonly IUserService _userService;
         public UserLogin Input = new UserLogin();
-        string? Message { get; set; }
+        public string Message { get; set; }
         public LoginModel(IUserService userService) => _userService = userService;
         public string ReturnUrl { get; set; }
 
@@ -23,17 +23,25 @@ namespace ETicaretClient.Pages.UI
 
             try
             {
-                // Use the custom HttpClientService to send the POST request
                 var user = await _userService.UserLogin(Input);
-                Message = "You are in successfully!";
+                if (user != null)
+                {
+                    Message = "You are in successfully!";
+                    return RedirectToPage("./CreateProduct");
+                }
+                else
+                {
+                    Message = "Invalid login attempt.";
+                    return Page();
+                }
             }
             catch (Exception ex)
             {
                 Message = $"Error: {ex.Message}";
+                return Page();
             }
-
-            return Page();
         }
+
         public void OnGet()
         {
         }

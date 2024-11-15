@@ -9,6 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <section>
+    
             <form id="account" method="post">
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -39,14 +40,15 @@
                 </div>
             </form>
         </section>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-info" role="alert">
+                @Model.Message
+            </div>
+        }
     </div>
 </div>
-
-
-
-
-
-
 
 @{
 }
